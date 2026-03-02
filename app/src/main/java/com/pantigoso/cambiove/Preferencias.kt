@@ -1,42 +1,37 @@
 package com.pantigoso.cambiove
 
 import android.content.Context
+import android.content.SharedPreferences
 
-// Modelo de datos unificado
 data class TasasGlobales(
-    val dolarBcv: Double,
-    val euroBcv: Double,
-    val usdtBinance: Double,
-    val fecha: String
+    val dolarBcv: Double = 0.0,
+    val euroBcv: Double = 0.0,
+    val usdtBinance: Double = 0.0,
+    val fecha: String = "Sin fecha"
 )
 
 class Preferencias(context: Context) {
-    private val storage = context.getSharedPreferences("bcv_cache", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = context.getSharedPreferences("tasas_prefs", Context.MODE_PRIVATE)
 
     fun guardarTasas(tasas: TasasGlobales) {
-        storage.edit().apply {
+        prefs.edit().apply {
+            putFloat("dolar", tasas.dolarBcv.toFloat())
+            putFloat("euro", tasas.euroBcv.toFloat())
+            putFloat("usdt", tasas.usdtBinance.toFloat())
             putString("fecha", tasas.fecha)
-            putString("dolar", tasas.dolarBcv.toString())
-            putString("euro", tasas.euroBcv.toString())
-            putString("usdt", tasas.usdtBinance.toString())
             apply()
         }
     }
 
     fun obtenerTasasGuardadas(): TasasGlobales? {
-        val fecha = storage.getString("fecha", null)
-        val dolarStr = storage.getString("dolar", null)
-        val euroStr = storage.getString("euro", null)
-        val usdtStr = storage.getString("usdt", "0.0")
+        val dolar = prefs.getFloat("dolar", 0f).toDouble()
+        if (dolar == 0.0) return null
 
-        if (fecha != null && dolarStr != null && euroStr != null) {
-            return TasasGlobales(
-                dolarBcv = dolarStr.toDoubleOrNull() ?: 0.0,
-                euroBcv = euroStr.toDoubleOrNull() ?: 0.0,
-                usdtBinance = usdtStr?.toDoubleOrNull() ?: 0.0,
-                fecha = fecha
-            )
-        }
-        return null
+        return TasasGlobales(
+            dolarBcv = dolar,
+            euroBcv = prefs.getFloat("euro", 0f).toDouble(),
+            usdtBinance = prefs.getFloat("usdt", 0f).toDouble(),
+            fecha = prefs.getString("fecha", "Fecha no disponible") ?: ""
+        )
     }
 }
