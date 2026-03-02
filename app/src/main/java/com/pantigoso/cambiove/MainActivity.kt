@@ -119,12 +119,10 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
                 .imePadding()
                 .verticalScroll(scrollState)
                 .padding(horizontal = 24.dp)
-                .padding(top = 60.dp, bottom = 20.dp),
+                .padding(top = 53.dp, bottom = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Cambio VE", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
-            Text("(Yai's Version)", fontSize = 12.sp, fontStyle = FontStyle.Italic, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
-
             Spacer(modifier = Modifier.height(15.dp))
 
             // TARJETA DE TASAS (Sin porcentajes)
@@ -132,7 +130,7 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(14.dp)) {
                     if (tasas != null) {
                         Text(tasas!!.fecha, fontSize = 11.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, fontStyle = FontStyle.Italic)
                         Spacer(Modifier.height(10.dp))
@@ -152,7 +150,7 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
                         Spacer(Modifier.height(8.dp))
 
                         Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-                            Text("₮ Binance USDT:", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
+                            Text(" ₮ Binance USDT:", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
                             Text("${formatoVenezuela(tasas!!.usdtBinance)} Bs.", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         }
 
@@ -167,7 +165,7 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // ENTRADA
             OutlinedTextField(
@@ -200,7 +198,7 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
             }
 
             // RESULTADO
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text("Resultado:", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f))
             Text(
                 text = "${formatoVenezuela(resultadoNumerico)} ${if(esVesADivisa) monedaSeleccionada else "Bs."}",
@@ -210,8 +208,8 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
             // DEDICATORIA
             Spacer(modifier = Modifier.height(50.dp))
             Text(
-                text = "Te ama mucho: Andres Pantigoso ❤️",
-                fontSize = 14.sp, fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                text = "Creador: Andres Pantigoso (andresdavidps6@gmail.com)",
+                fontSize = 12.sp, fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
             )
         }
 
@@ -225,11 +223,28 @@ fun PantallaPrincipal(modoOscuroActual: Boolean, onCambiarTema: () -> Unit) {
     }
 }
 
+private val LightColors = lightColorScheme(
+    primary = Color(0xFF005FAC), onPrimary = Color.White,
+    primaryContainer = Color(0xFFD6E3FF), onPrimaryContainer = Color(0xFF001B3D),
+    secondary = Color(0xFF555F71), onSecondary = Color.White,
+    background = Color(0xFFFDFBFF), onBackground = Color(0xFF1A1C1E),
+    surfaceVariant = Color(0xFFE0E2EC), onSurfaceVariant = Color(0xFF43474E),
+    error = Color(0xFFBA1A1A)
+)
+
+private val DarkColors = darkColorScheme(
+    primary = Color(0xFFA8C8FF), onPrimary = Color(0xFF003062),
+    primaryContainer = Color(0xFF00468C), onPrimaryContainer = Color(0xFFD6E3FF),
+    secondary = Color(0xFFBDC7DC), onSecondary = Color(0xFF273141),
+    background = Color(0xFF1A1C1E), onBackground = Color(0xFFE2E2E6),
+    surfaceVariant = Color(0xFF44474F), onSurfaceVariant = Color(0xFFC4C6D0),
+    error = Color(0xFFFFB4AB)
+)
+
 @Composable
 fun CambioVeTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
-    val light = lightColorScheme(primary = Color(0xFFFFD54F), onPrimary = Color.Black, background = Color(0xFFFFFBFF), surfaceVariant = Color(0xFFF0EAE2))
-    val dark = darkColorScheme(primary = Color(0xFFFFD758), onPrimary = Color.Black, background = Color(0xFF121212), surfaceVariant = Color(0xFF252525))
-    MaterialTheme(colorScheme = if (darkTheme) dark else light, content = content)
+    val colorScheme = if (darkTheme) DarkColors else LightColors
+    MaterialTheme(colorScheme = colorScheme, content = content)
 }
 
 fun formatoVenezuela(monto: Double): String {
